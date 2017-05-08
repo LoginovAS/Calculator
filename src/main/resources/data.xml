@@ -1,0 +1,26 @@
+<expressions>
+	<expression>
+		<operation OperationType="SUM">
+			<operation OperationType="SUM">
+				<arg>10</arg>
+				<arg>15</arg>
+			</operation>
+			<operation OperationType="SUM">
+				<arg>1</arg>
+				<arg>5</arg>
+			</operation>
+		</operation>
+	</expression>
+	<expression>
+		<operation OperationType="SUM">
+			<operation OperationType="SUM">
+				<arg>2</arg>
+				<arg>4</arg>
+			</operation>
+			<operation OperationType="SUM">
+				<arg>3</arg>
+				<arg>3</arg>
+			</operation>
+		</operation>
+	</expression>
+</expressions>
