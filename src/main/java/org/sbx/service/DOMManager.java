@@ -1,40 +1,61 @@
 package org.sbx.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.sbx.dao.XMLManager;
 import org.sbx.helpers.NodeName;
 import org.sbx.helpers.Operation;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DOMManager {
 
+    private static final Logger logger = LogManager.getLogger(DOMManager.class);
+
+    private static final String SUM = "SUM";
+    private static final String SUB = "SUB";
+    private static final String MUL = "MUL";
+    private static final String DIV = "DIV";
+
     private Calculator calculator;
+    private List<Double> resultList;
 
     public DOMManager() {
         calculator = new Calculator();
+        resultList = new ArrayList<>();
     }
 
-    public void parse(Node node) {
-        if (node.getNodeName() == NodeName.OPERATION_TAG) {
+    public List<Double> parse(Node node) {
+        if (node.getNodeName().equals(NodeName.OPERATION_TAG)) {
 
             NodeList list = node.getChildNodes();
             NamedNodeMap attrs = node.getAttributes();
 
             Operation operation = getCurrentOperation(attrs.getNamedItem(NodeName.OPERATION_TYPE).getNodeValue());
 
-            calculator.printResult(operation, node);
+            resultList.add(calculator.getResults(operation, node).get(0));
+
         } else {
             NodeList list = node.getChildNodes();
             if (list != null) {
                 for (int i = 0; i < list.getLength(); i++) {
                     Node child = list.item(i);
-                    if (child.getNodeType() != Node.ELEMENT_NODE)
+
+                    if (child.getNodeType() != Node.ELEMENT_NODE) {
                         continue;
+                    }
+
                     parse(child);
                 }
             }
         }
+
+        return resultList;
     }
 
     private static List<Node> getChildrenList(Node node) {
@@ -59,15 +80,18 @@ public class DOMManager {
 
     public static Operation getCurrentOperation(String operation) {
 
-        if (operation.equals("SUM")) {
-            return Operation.SUM;
-        } else if (operation.equals("SUB")) {
-            return Operation.SUB;
-        } else if (operation.equals("MUL")) {
-            return Operation.MUL;
-        } else if (operation.equals("DIV")) {
-            return Operation.DIV;
-        } else return Operation.NONE;
+        switch (operation) {
+            case SUM:
+                return Operation.SUM;
+            case SUB:
+                return Operation.SUB;
+            case MUL:
+                return Operation.MUL;
+            case DIV:
+                return Operation.DIV;
+            default:
+                return Operation.NONE;
+        }
 
     }
 }
