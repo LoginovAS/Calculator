@@ -50,7 +50,7 @@ public class XMLManager {
         return documentBuilder.parse(INPUT_XML);
     }
 
-    public static boolean writeResultsToXML(List<Double> resultsList) throws JAXBException, SAXException, IOException{
+    public static void writeResultsToXML(List<Double> resultsList) throws JAXBException, SAXException, IOException{
 
         File output = new File(OUTPUT_XML);
 
@@ -71,8 +71,6 @@ public class XMLManager {
 
         calculator.setExpressionResults(results);
         marshaller.marshal(calculator, output);
-
-        return false;
     }
 
     public void assertValid() throws SAXException, IOException {
