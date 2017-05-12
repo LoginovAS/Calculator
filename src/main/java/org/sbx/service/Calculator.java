@@ -64,7 +64,7 @@ public class Calculator {
         return Integer.getInteger(node.getTextContent());
     }
 
-    public List<Double> getResults(Operation operation, Node node) {
+    public List<Double> getResults(Operation operation, Node node) throws ArithmeticException{
 
         List<Double> resultList = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class Calculator {
                     resultList.add(calc(left(node)) / d);
                 } else {
                     logger.error("Division by Zero found");
-                    System.exit(1);
+                    throw new ArithmeticException();
                 }
 
                 break;
